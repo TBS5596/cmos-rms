@@ -23,7 +23,7 @@ The Django application provides the following functionalities:
 Authentication system
 Creation, modification, and deletion of risk objects
 Displaying of risk objects in tabular and chart form
-Updating of risk mitigated plan
+Updating of a risk
 To use the application, simply visit the appropriate URL routes in your web browser, and follow the instructions provided.
 
 License
