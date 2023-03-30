@@ -1,0 +1,144 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard{% endblock title %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6">
+        <h2>Risks</h2>
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <td>Risk Name</td>
+                    <td class="text-center">Score</td>
+                </tr>
+            </thead>
+            <tbody>
+                {% for risk in risks %}
+                <tr>
+                    <td><a href="{% url 'view-risk' risk.id %}" class="text-decoration-none">{{ risk.title }}</a></td>
+
+                    {% if risk.overall_score < 33 %}
+                    <td class="bg-success text-center">Low</td>
+                    {% endif %}
+
+                    {% if risk.overall_score >= 33 and risk.overall_score < 66 %}
+                    <td class="bg-warning text-center">Medium</td>
+                    {% endif %}
+
+                    {% if risk.overall_score >= 66 %}
+                    <td class="bg-danger text-center">High</td>
+                    {% endif %}
+                </tr>
+                {% empty %}
+                <tr><td colspan="2">Data not found!</td></tr>  
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="col-m-6">
+        <h2>Status</h2>
+        <canvas id="statusBar"></canvas>
+    </div> 
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <h2>Impact</h2>
+        <canvas id="impactPie"></canvas>
+    </div>
+    <div class="col-md-6">
+        <h2>Likelihood</h2>
+        <canvas id="likelihoodPie"></canvas>
+    </div>
+</div>
+{% endblock content %}
+
+{% block script %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4"></script>
+<script>
+    // generate chart for impact statistics
+    var impact_ctx = document.getElementById('impactPie').getContext('2d');
+    var impactChart = new Chart(impact_ctx, {
+        type: 'pie',
+        data: {
+            labels: {{ risksImpactStats.labels|safe }},
+            datasets: [{
+                label: '',
+                data: {{ risksImpactStats.data|safe }},
+                backgroundColor: [
+                    'rgb(92, 184, 92)',
+                    'rgb(240, 173, 78)',
+                    'rgb(217, 83, 79)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Impact',
+                }
+            }
+        }
+    });
+    // generate chart for likelihood statistics
+    var likelihood_ctx = document.getElementById('likelihoodPie').getContext('2d');
+    var likelihoodChart = new Chart(likelihood_ctx, {
+        type: 'pie',
+        data: {
+            labels: {{ risksLikelihoodStats.labels|safe }},
+            datasets: [{
+                label: '',
+                data: {{ risksLikelihoodStats.data|safe }},
+                backgroundColor: [
+                    'rgb(92, 184, 92)',
+                    'rgb(240, 173, 78)',
+                    'rgb(217, 83, 79)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Likelihood',
+                }
+            }
+        }
+    });
+    // generate chart for status statistics
+    var status_ctx = document.getElementById('statusBar').getContext('2d');
+    var statusChart = new Chart(status_ctx, {
+        type: 'bar',
+        data: {
+            labels: {{ risksStatusStats.labels|safe }},
+            datasets: [{
+                label: '',
+                data: {{ risksStatusStats.data|safe }},
+                backgroundColor: [
+                    'rgb(217, 83, 79)',
+                    'rgb(92, 184, 92)',
+                    'rgb(240, 173, 78)',
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            indexAxis: 'y',
+            scales: {
+                y: {
+                  beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+{% endblock script %}

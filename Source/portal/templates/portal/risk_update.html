@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ risk.title }}{% endblock title %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="shadow p-3 my-5 w-50 mx-auto bg-body rounded">
+  <form method="post" action="{% url 'update-risk' risk.id %}">
+    <h1>Update Risk</h1>
+    <hr>
+    {% csrf_token %}
+    {% crispy form %}
+    <button type="submit" class="btn btn-primary">Update</button>
+  </form>
+</div>
+{% endblock %}

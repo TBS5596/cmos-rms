@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}Add a Risk{% endblock title %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="shadow p-3 my-5 w-50 mx-auto bg-body rounded">
+    {% if error is not None %}
+    <div class="alert alert-danger" role="alert">
+        {{ error }}
+    </div>
+    {% endif %}
+    <form action="{% url 'add-risk' %}" method="post">
+        <h3 class="text-center">Risk Form</h3>
+        <hr>
+        {% csrf_token %}
+        {% crispy form %}
+        <button type="submit" class="btn btn-sm btn-primary">Add</button>
+    </form>
+</div>
+{% endblock content %}

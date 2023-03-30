@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block title %}All Risks{% endblock title %}
+
+{% block content %}
+<table id="RiskTable" class="display">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Title</th>
+            <th scope="col">Category</th>
+            <th scope="col">Owner</th>
+            <th scope="col">Likelihood</th>
+            <th scope="col">Impact</th>
+            <th scope="col">Status</th>
+            <th scope="col">Reviewed</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for risk in risks %}
+        <tr>
+            <th scope="row"><a href="{% url 'view-risk' risk.id %}" class="text-decoration-none">{{ risk.id }}</a></th>
+            <td><a href="{% url 'view-risk' risk.id %}" class="text-decoration-none">{{ risk.title }}</a></td>
+            <td>{{ risk.category }}</td>
+            <td>{{ risk.owner }}</td>
+
+            {% if risk.likelihood == "low" %}
+            <td class="bg-success text-white">{{ risk.likelihood }}</td>
+            {% else %}
+                {% if risk.likelihood == "medium" %}
+                <td class="bg-warning text-white">{{ risk.likelihood }}</td>
+                {% else %}
+                <td class="bg-danger text-white">{{ risk.likelihood }}</td>
+                {% endif %}
+            {% endif %}
+
+            {% if risk.impact == "low" %}
+            <td class="bg-success text-white">{{ risk.impact }}</td>
+            {% else %}
+                {% if risk.impact == "medium" %}
+                <td class="bg-warning text-white">{{ risk.impact }}</td>
+                {% else %}
+                <td class="bg-danger text-white">{{ risk.impact }}</td>
+                {% endif %}
+            {% endif %}
+
+            {% if risk.status == "resolved" %}
+            <td class="bg-success text-white">{{ risk.status }}</td>
+            {% else %}
+                {% if risk.status == "mitigated" %}
+                <td class="bg-warning text-white">{{ risk.status }}</td>
+                {% else %}
+                <td class="bg-danger text-white">{{ risk.status }}</td>
+                {% endif %}
+            {% endif %}
+
+            <td>{{ risk.review_date }}</td>
+        </tr>  
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock content %}
+
+{% block script %}
+<script>
+    $(document).ready( function () {
+        $('#RiskTable').DataTable();
+    } );
+</script>
+{% endblock script %}

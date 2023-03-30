@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block title %}View Risk{% endblock title %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+{% if error is not None %}
+<div class="alert alert-danger" role="alert">
+    {{ error }}
+</div>
+{% else %}
+<div class="shadow p-3 my-5 w-80 mx-auto bg-body rounded">
+    <h2>{{ risk.title }}</h2>
+    <p>{{ risk.description }}</p>
+    <table class="table table-striped">
+      <tbody>
+        <tr>
+          <td>ID</td>
+          <td>{{ risk.id }}</td>
+        </tr>
+        <tr>
+          <td>Category</td>
+          <td>{{ risk.get_category_display }}</td>
+        </tr>
+        <tr>
+          <td>Owner</td>
+          <td>{{ risk.owner }}</td>
+        </tr>
+        <tr>
+          <td>Likelihood</td>
+          <td>{{ risk.get_likelihood_display }}</td>
+        </tr>
+        <tr>
+          <td>Impact</td>
+          <td>{{ risk.get_impact_display }}</td>
+        </tr>
+        <tr>
+          <td>Overall Score</td>
+          <td>{{ risk.overall_score }}</td>
+        </tr>
+        <tr>
+          <td>Status</td>
+          <td>{{ risk.get_status_display }}</td>
+        </tr>
+        <tr>
+          <td>Mitigation Plan</td>
+          <td>{{ risk.mitigation_plan }}</td>
+        </tr>
+        <tr>
+          <td>Date Added</td>
+          <td>{{ risk.date_added }}</td>
+        </tr>
+        <tr>
+          <td>Review Date</td>
+          <td>{{ risk.review_date }}</td>
+        </tr>
+      </tbody>
+    </table>
+    <a href="{% url 'update-risk' risk.id %}" class="btn btn-primary">Update Mitigation Plan</a>
+  </div>
+  
+{% endif %}
+{% endblock content %}
